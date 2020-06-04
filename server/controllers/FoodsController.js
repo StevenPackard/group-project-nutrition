@@ -1,33 +1,22 @@
 import express from "express";
 import BaseController from "../utils/BaseController";
-import { postsService } from "../services/PostsService";
-import auth0Provider from "@bcwdev/auth0provider";
 import { foodsService } from "../services/FoodsService";
+import auth0Provider from "@bcwdev/auth0provider";
 
-export class PostsController extends BaseController {
+export class FoodsController extends BaseController {
   constructor() {
-    super("api/posts");
+    super("api/foods");
     this.router
       .get("", this.getAll)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(auth0Provider.getAuthorizedUserInfo)
-      .get("/:id/foods", this.getFoodsByPostId)
       .post("", this.create)
       .delete("/:id", this.remove);
   }
   async getAll(req, res, next) {
     try {
-      let data = await postsService.find();
+      let data = await foodsService.find();
       res.send(data);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getFoodsByPostId(req, res, next) {
-    try {
-      let data = await foodsService.find({ post: req.params.id });
-      return res.send(data);
     } catch (error) {
       next(error);
     }
@@ -36,7 +25,7 @@ export class PostsController extends BaseController {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorEmail = req.userInfo.email;
-      let data = await postsService.create(req.body);
+      let data = await foodsService.create(req.body);
       res.send(req.body);
     } catch (error) {
       next(error);
@@ -45,7 +34,7 @@ export class PostsController extends BaseController {
 
   async remove(req, res, next) {
     try {
-      await postsService.remove(req.params.id, req.userInfo.email);
+      await foodsService.remove(req.params.id, req.userInfo.email);
       res.send("Delorted");
     } catch (error) {
       next(error);
