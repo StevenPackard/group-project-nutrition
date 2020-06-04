@@ -1,26 +1,29 @@
 <template>
-  <div class="post">
-    <h1>Hello From Post Details Page</h1>
+  <div class="post container-fluid">
+    <div class="row">
+      <div class="col">
+        <foods />
+      </div>
+    </div>
   </div>
 </template>
 
 
 <script>
+import Foods from "@/components/FoodsComponent";
 export default {
   name: "PostDetailsPage",
   data() {
     return {};
   },
   mounted() {
-    this.$store.dispatch("getPostDetails", this.$route.params.id);
+    this.$store.dispatch("getFoods", this.$route.params.id);
   },
-  computed: {
-    post() {
-      return this.$store.state.activePost;
-    }
-  },
+  computed: {},
   methods: {},
-  components: {}
+  components: {
+    Foods
+  }
 };
 </script>
 

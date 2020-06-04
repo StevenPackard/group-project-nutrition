@@ -20,6 +20,7 @@ export default new Vuex.Store({
     profile: {},
     posts: [],
     activePost: {},
+    foods: [],
   },
   mutations: {
     setProfile(state, profile) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     setActivePost(state, post) {
       state.activePost = post;
+    },
+    setFoods(state, foods) {
+      state.foods = foods;
     },
   },
   actions: {
@@ -81,6 +85,32 @@ export default new Vuex.Store({
       try {
         let res = await _api.post("posts", post);
         dispatch("getAllPosts");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getActivePost({ commit, dispatch }, id) {
+      try {
+        let post = this.state.posts.find((p) => p.id == id);
+        commit("setActivePost", post);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    //#endregion
+    //#region Food Functions
+    async getFoods({ commit, dispatch }, id) {
+      try {
+        let res = await _api("/posts/" + id + "/foods");
+        commit("setFoods", res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async createFood({ commit, dispatch }, food) {
+      try {
+        let res = await _api("");
       } catch (error) {
         console.error(error);
       }
